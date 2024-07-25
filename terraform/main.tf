@@ -1,7 +1,8 @@
 # Creating a Elastic Container Repository
 resource "aws_ecr_repository" "nodeapp" {
-  name                 = terraform.workspace == "dev" ? "nodeapp-dev" : "nodeapp-prod"
+  name                 = "nodeapp"
   image_tag_mutability = "MUTABLE"
+  force_delete         = true
   image_scanning_configuration {
     scan_on_push = false
   }
@@ -16,7 +17,7 @@ resource "null_resource" "push_to_ecr" {
 
 # App Runner role to manage ECR
 resource "aws_iam_role" "apprunner-ecr-access-role" {
-  name               = terraform.workspace == "dev" ? "apprunner-ecr-access-role-dev" : "apprunner-ecr-access-role-prod"
+  name               = "apprunner-ecr-access-role"
   assume_role_policy = <<EOF
     {
     "Version": "2012-10-17",
@@ -41,7 +42,7 @@ resource "aws_iam_role_policy_attachment" "apprunner-ecr-access-role-policy-atta
 
 # App Runner Service Definition
 resource "aws_apprunner_service" "nodeapp-service" {
-  service_name = terraform.workspace == "dev" ? "nodeapp-service-dev" : "nodeapp-service-prod"
+  service_name = "nodeapp-service"
   source_configuration {
     image_repository {
       image_configuration {
