@@ -11,7 +11,7 @@ resource "aws_ecr_repository" "nodeapp" {
 # Bash script to build the docker image and push it to ECR
 resource "null_resource" "push_to_ecr" {
   provisioner "local-exec" {
-    command = "bash ${path.cwd}/../ecr-build-push.sh ${aws_ecr_repository.nodeapp.name} ${var.region}"
+    command = "bash ${path.cwd}/../code/ecr-build-push.sh ${aws_ecr_repository.nodeapp.name} ${var.region}"
   }
 }
 
@@ -76,43 +76,3 @@ resource "aws_apprunner_auto_scaling_configuration_version" "nodeapp" {
 resource "aws_apprunner_deployment" "nodeapp-deployment" {
   service_arn = aws_apprunner_service.nodeapp-service.arn
 }
-
-# # Route 53 Zone Configuration 
-# resource "aws_route53_zone" "route53_zone" {
-#   name          = var.domain_name
-#   force_destroy = true
-# }
-
-# # Route 53 Health Check
-# resource "aws_route53_health_check" "health_check" {
-#   fqdn              = aws_apprunner_service.nodeapp-service.service_url
-#   port              = 80
-#   type              = "HTTP"
-#   resource_path     = "/"
-#   failure_threshold = "5"
-#   request_interval  = "30"
-
-#   tags = {
-#     Name = "health-check"
-#   }
-# }
-
-# # Route 53 Record Configuration 
-# resource "aws_route53_record" "route53_record" {
-#   zone_id         = aws_route53_zone.route53_zone.zone_id
-#   set_identifier  = "apprunner"
-#   name            = var.subdomain_name
-#   type            = "CNAME"
-#   health_check_id = aws_route53_health_check.health_check.id
-#   ttl             = 300
-#   records         = ["${aws_apprunner_service.nodeapp-service.service_url}"]
-# }
-
-# # AWS Certificate Manager
-# resource "aws_acm_certificate" "domain-certificate" {
-#   domain_name       = var.domain_name
-#   validation_method = "DNS"
-#   lifecycle {
-#     create_before_destroy = true
-#   }
-# }
