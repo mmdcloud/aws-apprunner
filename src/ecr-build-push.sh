@@ -1,6 +1,6 @@
 #!/bin/bash
 mkdir final-code
-cp -r ../code/* final-code/
+cp -r ../src/* final-code/
 cd final-code
 
 ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)

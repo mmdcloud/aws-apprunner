@@ -2,7 +2,7 @@
 module "ecr" {
   source               = "./modules/ecr"
   repo_name            = "nodeapp"
-  command              = "bash ${path.cwd}/../code/ecr-build-push.sh ${module.ecr.name} ${var.region}"
+  command              = "bash ${path.cwd}/../src/ecr-build-push.sh ${module.ecr.name} ${var.region}"
   force_delete         = true
   image_tag_mutability = "MUTABLE"
   scan_on_push         = false
