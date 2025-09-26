@@ -48,5 +48,5 @@ module "app_runner" {
   memory                          = "2 GB"
   image_identifier                = "${module.ecr.repository_url}:latest"
   image_repository_type           = "ECR"
-  depends_on = [ module.ecr ]
+  depends_on                      = [module.ecr]
 }
