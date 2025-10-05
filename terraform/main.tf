@@ -1,4 +1,6 @@
+# -----------------------------------------------------------------
 # ECR Module
+# -----------------------------------------------------------------
 module "ecr" {
   source               = "./modules/ecr"
   repo_name            = "nodeapp"
@@ -8,7 +10,10 @@ module "ecr" {
   scan_on_push         = false
 }
 
+# -----------------------------------------------------------------
 # App Runner role to manage ECR
+# -----------------------------------------------------------------
+
 resource "aws_iam_role" "apprunner_ecr_access_role" {
   name               = "apprunner-ecr-access-role"
   assume_role_policy = <<EOF
@@ -33,7 +38,10 @@ resource "aws_iam_role_policy_attachment" "apprunner-ecr-access-role-policy-atta
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSAppRunnerServicePolicyForECRAccess"
 }
 
+# -----------------------------------------------------------------
 # App Runner Module
+# -----------------------------------------------------------------
+
 module "app_runner" {
   source                          = "./modules/app_runner"
   service_name                    = "nodeapp-service"
